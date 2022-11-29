@@ -1,0 +1,20 @@
+function [maxe]=yxy(L,R,N,f,F)
+h=(R-L)/N;
+ze=L:h:R;namda=1;
+h1=ze(2:end-1)-ze(1:end-2);%向后间隔
+h2=ze(3:end)-ze(2:end-1);%向前间隔
+ma=1/3*(h1+h2);
+mb=1/6*h2(1:end-1);
+sa=(1./h1+1./h2);
+sb=-1./(h2(1:end-1));
+a=sa+namda*ma;b=sb+namda*mb;
+temp=f(ze(2:end-1));
+rf=1/2*temp.*(h1+h2);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+M=diag(ma)+diag(mb,1)+diag(mb,-1);
+S=diag(sa)+diag(sb,1)+diag(sb,-1); 
+A=S+namda*M;
+U=A\rf';
+ff=F(ze(2:end-1));
+err=U'-ff;
+maxe=max(err);
